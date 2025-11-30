@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(50px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-50px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out forwards;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .animate-slideLeft {
+    animation: slideLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-slideRight {
+    animation: slideRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+    background-size: 1000px 100%;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Glass morphism effect */
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl shadow-blue-500/10;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600;
+  }
+
+  /* Card hover effect - REMOVED */
+  /* .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2;
+  } */
+
+  /* Button focus state */
+  .btn-focus {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+  }
+}
+
+body {
+  @apply antialiased;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Hide scrollbars while allowing scroll */
+html,
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
