@@ -33,7 +33,15 @@ npm run dev -- --host --port 5173
 
 ## Docker (recommended)
 ```bash
+# First time setup or when Dockerfile / dependencies change:
 docker compose up --build
+# backend:  http://localhost:8000
+# frontend: http://localhost:5173
+```
+```bash
+# Everyday development (when you open VS Code):
+# just run this in the VS Code terminal
+docker compose watch
 # backend:  http://localhost:8000
 # frontend: http://localhost:5173
 ```

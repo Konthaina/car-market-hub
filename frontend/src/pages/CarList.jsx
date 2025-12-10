@@ -17,6 +17,7 @@ import {
   FaTimes,
   FaUndo,
   FaInfoCircle,
+  FaStar,
   FaSkull,
   FaExclamationTriangle,
 } from 'react-icons/fa';
@@ -58,6 +59,7 @@ const CarList = () => {
   // eslint-disable-next-line no-unused-vars
   const [selectedImages, setSelectedImages] = useState({});
   const [formImages, setFormImages] = useState([]);
+  const [settingCover, setSettingCover] = useState({});
 
   // Image carousel state
   const [imageIndex, setImageIndex] = useState({});
@@ -250,6 +252,32 @@ const CarList = () => {
     } catch (err) {
       console.error('Error deleting image:', err);
       alert('Failed to delete image');
+    }
+  };
+
+  const handleSetCoverImage = async (carId, imageId, images = []) => {
+    setSettingCover((prev) => ({ ...prev, [carId]: imageId }));
+
+    try {
+      await api.put(`/cars/${carId}/images/${imageId}`, { is_cover: true });
+
+      // Unset any other existing cover images to keep a single cover
+      const otherCoverIds =
+        images?.filter((img) => img.id !== imageId && img.is_cover).map((img) => img.id) || [];
+      for (const otherId of otherCoverIds) {
+        try {
+          await api.put(`/cars/${carId}/images/${otherId}`, { is_cover: false });
+        } catch (unsetErr) {
+          console.error('Error unsetting previous cover image:', unsetErr);
+        }
+      }
+
+      fetchCars(searchQuery);
+    } catch (err) {
+      console.error('Error setting cover image:', err);
+      alert(`Failed to set cover image: ${err.response?.data?.message || err.message}`);
+    } finally {
+      setSettingCover((prev) => ({ ...prev, [carId]: null }));
     }
   };
 
@@ -1080,7 +1108,7 @@ const CarList = () => {
                             />
                           </label>
                         </div>
-                        {car.images?.slice(0, 2).map((image) => (
+                        {car.images?.map((image) => (
                           <div
                             key={image.id}
                             className="flex items-center justify-between bg-gray-50 p-2.5 rounded text-xs"
@@ -1092,15 +1120,33 @@ const CarList = () => {
                                 className="w-8 h-8 object-cover rounded"
                               />
                               {image.is_cover && (
-                                <span className="text-green-600 font-semibold text-xs">★</span>
+                                <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-semibold uppercase text-[10px]">
+                                  Cover
+                                </span>
                               )}
                             </div>
-                            <button
-                              onClick={() => handleDeleteImage(car.id, image.id)}
-                              className="text-red-600 hover:text-red-800 transition-colors"
-                            >
-                              <FaTrash className="h-3 w-3" />
-                            </button>
+                            <div className="flex items-center space-x-2">
+                              {!image.is_cover && (
+                                <button
+                                  onClick={() => handleSetCoverImage(car.id, image.id, car.images)}
+                                  disabled={settingCover[car.id] === image.id}
+                                  className="flex items-center space-x-1 px-2 py-1 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded transition-colors disabled:opacity-60"
+                                >
+                                  {settingCover[car.id] === image.id ? (
+                                    <AiOutlineLoading3Quarters className="h-3 w-3 animate-spin" />
+                                  ) : (
+                                    <FaStar className="h-3 w-3" />
+                                  )}
+                                  <span>Set cover</span>
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleDeleteImage(car.id, image.id)}
+                                className="text-red-600 hover:text-red-800 transition-colors"
+                              >
+                                <FaTrash className="h-3 w-3" />
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
