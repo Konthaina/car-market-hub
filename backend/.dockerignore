@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Node stuff (if any)
+node_modules
+npm-debug.log*
+yarn-error.log*
+
+# Composer vendor on host (we install inside container)
+vendor
+
+# IDE / OS
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs / cache
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+
+# Tests / misc
+tests
+coverage
+.phpunit.result.cache
+*.log
+
+# ⚠️ IMPORTANT: do NOT ignore .env or .env.example here

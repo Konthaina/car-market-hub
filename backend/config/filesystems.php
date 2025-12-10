@@ -41,7 +41,8 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            // Default APP_URL to the exposed HTTP port in Docker so generated image URLs work out of the box.
+            'url' => env('APP_URL', 'http://localhost:8000').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

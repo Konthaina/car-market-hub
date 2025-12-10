@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Car;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PendingCarSeeder extends Seeder
@@ -126,6 +127,23 @@ class PendingCarSeeder extends Seeder
             ],
         ];
 
+        // Ensure placeholder car images exist in the public disk (copied from repo assets)
+        $imagePaths = [
+            'cars/car-1.jpg',
+            'cars/car-2.jpg',
+            'cars/car-3.jpg',
+            'cars/car-4.jpg',
+        ];
+
+        foreach ($imagePaths as $path) {
+            if (!Storage::disk('public')->exists($path)) {
+                $seedImage = database_path('seeders/images/' . basename($path));
+                if (is_file($seedImage)) {
+                    Storage::disk('public')->put($path, file_get_contents($seedImage));
+                }
+            }
+        }
+
         foreach ($carsData as $carData) {
             $car = Car::create([
                 'id' => (string) Str::uuid(),
@@ -143,13 +161,6 @@ class PendingCarSeeder extends Seeder
             ]);
 
             // Add sample image for each car
-            $imagePaths = [
-                'cars/car-1.jpg',
-                'cars/car-2.jpg',
-                'cars/car-3.jpg',
-                'cars/car-4.jpg',
-            ];
-            
             $car->images()->create([
                 'path' => $imagePaths[array_rand($imagePaths)],
                 'alt' => $carData['make'] . ' ' . $carData['model'],

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Support\Facades\Storage;
 
 class CarImage extends Model
 {
@@ -25,7 +26,7 @@ class CarImage extends Model
     public function getUrlAttribute()
     {
         if ($this->path) {
-            return asset('storage/' . $this->path);
+            return Storage::disk('public')->url($this->path);
         }
         return null;
     }

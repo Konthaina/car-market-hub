@@ -1,0 +1,44 @@
+# Frontend .dockerignore (Vite/React)
+
+# Git
+.git
+.gitignore
+
+# Node modules from host (we install inside container)
+node_modules
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist
+build
+.out
+.next
+.vite
+
+# Env files (you usually pass via docker-compose)
+.env
+.env.*
+.env.local
+
+# IDE / OS files
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Tests & coverage
+coverage
+jest.config.*
+vitest.config.*
+*.test.*
+*.spec.*
+
+# Misc
+Dockerfile*
+docker-compose*
+compose.yaml
+*.log
