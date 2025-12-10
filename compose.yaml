@@ -32,6 +32,24 @@ services:
       DB_PASSWORD: car_pass
     volumes:
       - backend_storage:/var/www/html/storage
+    develop:
+      watch:
+        # sync backend code into the container
+        - action: sync
+          path: ./backend
+          target: /var/www/html
+          ignore:
+            - vendor/
+            - node_modules/
+            - .git/
+            - storage/
+        # if these change, rebuild the image & restart backend
+        - action: rebuild
+          path: ./backend/composer.json
+        - action: rebuild
+          path: ./backend/package.json
+        - action: rebuild
+          path: ./backend/Dockerfile
 
   frontend:
     build:
@@ -43,6 +61,23 @@ services:
       - backend
     environment:
       VITE_API_BASE_URL: http://backend:8000/api
+    develop:
+      watch:
+        # sync frontend source into container (adjust target if your Dockerfile uses a different WORKDIR)
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - .git/
+            - dist/
+        # rebuild when deps/dockerfile change
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/package-lock.json
+        - action: rebuild
+          path: ./frontend/Dockerfile
 
 volumes:
   db_data:
